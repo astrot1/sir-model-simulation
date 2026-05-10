@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modelo Epidemiológico SIR</title>
+
+  <!-- Poppins: sans-serif médico-profesional -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=DM+Mono:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════
+       BARRA SUPERIOR INSTITUCIONAL
+  ══════════════════════════════════════ -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <span class="topbar-cross">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="9" y="2" width="6" height="20" rx="2"/>
+            <rect x="2" y="9" width="20" height="6" rx="2"/>
+          </svg>
+        </span>
+        Herramienta de Análisis Epidemiológico
+      </div>
+      <div class="topbar-right">
+        Ecuaciones Diferenciales · C-502105-4-1S-2026
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       HERO HEADER
+  ══════════════════════════════════════ -->
+  <header class="hero">
+    <div class="hero-inner">
+
+      <div class="hero-tag">
+        <span class="tag-dot"></span>
+        Modelo Matemático · Epidemiología
+      </div>
+
+      <h1 class="hero-title">
+        Modelo Epidemiológico
+        <em class="title-sir">SIR</em>
+      </h1>
+
+      <p class="hero-desc">
+        Simulación interactiva de la propagación de enfermedades infecciosas<br class="br-hide"/>
+        mediante sistemas de ecuaciones diferenciales ordinarias.
+      </p>
+
+      <!-- Ecuaciones -->
+      <div class="eq-row">
+        <div class="eq-pill eq-s">
+          <span class="eq-lhs">dS/dt</span>
+          <span class="eq-eq">=</span>
+          <span class="eq-rhs">−β · S · I / N</span>
+        </div>
+        <div class="eq-pill eq-i">
+          <span class="eq-lhs">dI/dt</span>
+          <span class="eq-eq">=</span>
+          <span class="eq-rhs">β · S · I / N − γ · I</span>
+        </div>
+        <div class="eq-pill eq-r">
+          <span class="eq-lhs">dR/dt</span>
+          <span class="eq-eq">=</span>
+          <span class="eq-rhs">γ · I</span>
+        </div>
+      </div>
+
+      <!-- Créditos académicos -->
+      <div class="academic-card">
+        <div class="ac-meta">
+          <div class="ac-item">
+            <svg class="ac-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+            <div>
+              <div class="ac-lbl">Curso</div>
+              <div class="ac-val">Ecuaciones Diferenciales — C-502105-4-1S-2026</div>
+            </div>
+          </div>
+          <div class="ac-sep"></div>
+          <div class="ac-item">
+            <svg class="ac-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M6 20v-2a6 6 0 0 1 12 0v2"/>
+            </svg>
+            <div>
+              <div class="ac-lbl">Docente</div>
+              <div class="ac-val">Nixon Andrés Meneses Marentes</div>
+            </div>
+          </div>
+        </div>
+        <div class="ac-students">
+          <div class="chip"><span class="chip-av">YB</span>Yeimar Joshep Bernal Zea</div>
+          <div class="chip"><span class="chip-av">SV</span>Sofía Velandia Rodríguez</div>
+          <div class="chip"><span class="chip-av">TC</span>Thomas Cruz Vanegas</div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════
+       KPI BAND
+  ══════════════════════════════════════ -->
+  <div class="kpi-band">
+    <div class="kpi-inner">
+
+      <div class="kpi kpi-s">
+        <div class="kpi-icon kpi-icon-s">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-lbl">Susceptibles</span>
+          <span class="kpi-num" id="kpiS">990</span>
+        </div>
+        <div class="kpi-bar kpi-bar-s"></div>
+      </div>
+
+      <div class="kpi kpi-i">
+        <div class="kpi-icon kpi-icon-i">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-lbl">Infectados</span>
+          <span class="kpi-num" id="kpiI">10</span>
+        </div>
+        <div class="kpi-bar kpi-bar-i"></div>
+      </div>
+
+      <div class="kpi kpi-r">
+        <div class="kpi-icon kpi-icon-r">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-lbl">Recuperados</span>
+          <span class="kpi-num" id="kpiR">0</span>
+        </div>
+        <div class="kpi-bar kpi-bar-r"></div>
+      </div>
+
+      <div class="kpi kpi-r0">
+        <div class="kpi-icon kpi-icon-r0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="kpi-body">
+          <span class="kpi-lbl">R₀ = β / γ</span>
+          <span class="kpi-num" id="kpiR0">3.00</span>
+        </div>
+        <span id="kpiBadge" class="r0-badge r0-epidemic">Epidemia</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       DASHBOARD PRINCIPAL
+  ══════════════════════════════════════ -->
+  <main class="dashboard">
+
+    <!-- Controles -->
+    <aside class="ctrl-panel">
+
+      <div class="panel-header">
+        <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+        </svg>
+        Parámetros del modelo
+      </div>
+
+      <!-- β -->
+      <div class="ctrl-block">
+        <div class="ctrl-row">
+          <div class="ctrl-info">
+            <span class="ctrl-name">β — Tasa de contagio</span>
+            <span class="ctrl-hint">Contactos efectivos por día</span>
+          </div>
+          <output class="ctrl-val val-i" id="betaVal">0.30</output>
+        </div>
+        <input class="slider sl-i" type="range" id="betaSlider" min="0.01" max="1.00" step="0.01" value="0.30"/>
+        <div class="sl-ends"><span>0.01</span><span>1.00</span></div>
+      </div>
+
+      <!-- γ -->
+      <div class="ctrl-block">
+        <div class="ctrl-row">
+          <div class="ctrl-info">
+            <span class="ctrl-name">γ — Tasa de recuperación</span>
+            <span class="ctrl-hint">Fracción que se recupera/día</span>
+          </div>
+          <output class="ctrl-val val-r" id="gammaVal">0.10</output>
+        </div>
+        <input class="slider sl-r" type="range" id="gammaSlider" min="0.01" max="1.00" step="0.01" value="0.10"/>
+        <div class="sl-ends"><span>0.01</span><span>1.00</span></div>
+      </div>
+
+      <!-- N -->
+      <div class="ctrl-block">
+        <div class="ctrl-row">
+          <div class="ctrl-info">
+            <span class="ctrl-name">N — Población total</span>
+            <span class="ctrl-hint">Tamaño de la comunidad</span>
+          </div>
+          <output class="ctrl-val val-s" id="popVal">1,000</output>
+        </div>
+        <input class="slider sl-s" type="range" id="popSlider" min="100" max="5000" step="100" value="1000"/>
+        <div class="sl-ends"><span>100</span><span>5,000</span></div>
+      </div>
+
+      <!-- I₀ -->
+      <div class="ctrl-block">
+        <div class="ctrl-row">
+          <div class="ctrl-info">
+            <span class="ctrl-name">I₀ — Infectados iniciales</span>
+            <span class="ctrl-hint">Casos al inicio del brote</span>
+          </div>
+          <output class="ctrl-val val-i" id="infVal">10</output>
+        </div>
+        <input class="slider sl-i" type="range" id="infSlider" min="1" max="200" step="1" value="10"/>
+        <div class="sl-ends"><span>1</span><span>200</span></div>
+      </div>
+
+      <!-- R₀ card dentro del panel -->
+      <div class="r0-card">
+        <div class="r0-card-head">
+          <span class="r0-formula-lbl">R₀ = β / γ</span>
+          <span id="r0BadgePanel" class="r0-badge r0-epidemic">Epidemia probable</span>
+        </div>
+        <div id="r0NumPanel" class="r0-big">3.00</div>
+        <p class="r0-note">R₀ &gt; 1 → propagación activa &nbsp;|&nbsp; R₀ &lt; 1 → extinción</p>
+      </div>
+
+      <button id="resetBtn" class="btn-reset">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
+        </svg>
+        Reiniciar simulación
+      </button>
+    </aside>
+
+    <!-- Visualizaciones -->
+    <section class="viz-col">
+
+      <!-- Gráfica SIR -->
+      <div class="card">
+        <div class="card-hd">
+          <div>
+            <h3 class="card-title">Evolución temporal — S(t) · I(t) · R(t)</h3>
+            <p class="card-sub">Método Runge-Kutta 4 · Δt = 0.5 días · 160 días de simulación</p>
+          </div>
+          <div class="legend">
+            <span class="leg"><span class="ldot ld-s"></span>Susceptibles</span>
+            <span class="leg"><span class="ldot ld-i"></span>Infectados</span>
+            <span class="leg"><span class="ldot ld-r"></span>Recuperados</span>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="sirChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Simulación de agentes -->
+      <div class="card">
+        <div class="card-hd">
+          <div>
+            <h3 class="card-title">Simulación de Agentes</h3>
+            <p class="card-sub">Representación visual del estado de la población en tiempo real</p>
+          </div>
+          <div class="agent-stats">
+            <span class="astat as-s"><span class="ldot ld-s sm"></span>S: <strong id="statS">990</strong></span>
+            <span class="astat as-i"><span class="ldot ld-i sm"></span>I: <strong id="statI">10</strong></span>
+            <span class="astat as-r"><span class="ldot ld-r sm"></span>R: <strong id="statR">0</strong></span>
+          </div>
+        </div>
+        <canvas id="particleCanvas" class="particle-canvas"></canvas>
+        <div class="time-row">
+          <div class="time-track"><div id="timeBar" class="time-fill"></div></div>
+          <span id="timeLabel" class="time-lbl">t = 0 días</span>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ══════════════════════════════════════
+       SECCIÓN EDUCATIVA
+  ══════════════════════════════════════ -->
+  <section class="edu">
+    <div class="edu-hd">
+      <h2 class="edu-title">Guía del Modelo SIR</h2>
+      <p class="edu-sub">Marco conceptual para interpretar la simulación</p>
+    </div>
+
+    <div class="edu-grid">
+
+      <div class="edu-card">
+        <div class="edu-top acc-s">
+          <div class="edu-ico-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h4>Variables del modelo</h4>
+        </div>
+        <ul>
+          <li><strong class="s-t">S(t)</strong> — Susceptibles: sin exposición previa a la enfermedad.</li>
+          <li><strong class="i-t">I(t)</strong> — Infectados: contagiados y con capacidad de transmitir.</li>
+          <li><strong class="r-t">R(t)</strong> — Recuperados: inmunes, ya no transmiten la enfermedad.</li>
+          <li><strong>N</strong> — S + I + R = N (constante en toda la simulación).</li>
+        </ul>
+      </div>
+
+      <div class="edu-card">
+        <div class="edu-top acc-i">
+          <div class="edu-ico-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <h4>Lectura de las curvas</h4>
+        </div>
+        <ul>
+          <li><strong class="s-t">S(t)</strong> decae monotónicamente: los susceptibles solo se infectan.</li>
+          <li><strong class="i-t">I(t)</strong> forma una curva en campana con un pico epidémico.</li>
+          <li><strong class="r-t">R(t)</strong> crece hasta estabilizarse al final del brote.</li>
+          <li>El área bajo I(t) mide la carga acumulada de enfermedad.</li>
+        </ul>
+      </div>
+
+      <div class="edu-card">
+        <div class="edu-top acc-warn">
+          <div class="edu-ico-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <h4>Efecto de aumentar β</h4>
+        </div>
+        <ul>
+          <li>La enfermedad se propaga <strong>más rápidamente</strong> en la población.</li>
+          <li>El pico de I(t) es más alto y llega más pronto.</li>
+          <li>Mayor porcentaje de la población resulta infectado.</li>
+          <li>R₀ sube — equivalente a reducir el distanciamiento social.</li>
+        </ul>
+      </div>
+
+      <div class="edu-card">
+        <div class="edu-top acc-ok">
+          <div class="edu-ico-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <h4>Efecto de aumentar γ</h4>
+        </div>
+        <ul>
+          <li>Los infectados se recuperan <strong>más rápido</strong>.</li>
+          <li>El pico de I(t) es más bajo y la epidemia termina antes.</li>
+          <li>Menor presión sobre el sistema de salud.</li>
+          <li>R₀ baja — equivalente a tratamientos más eficaces.</li>
+        </ul>
+      </div>
+
+      <div class="edu-card wide">
+        <div class="edu-top acc-n">
+          <div class="edu-ico-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <h4>Número Reproductivo Básico R₀</h4>
+        </div>
+        <p class="edu-p">R₀ = β / γ representa el número promedio de individuos que un solo infectado contagia en una población completamente susceptible durante su período infeccioso.</p>
+        <div class="r0-scale">
+          <div class="r0-block r0-ctrl"><div class="r0-val">R₀ &lt; 1</div><div class="r0-desc">La epidemia se extingue naturalmente</div></div>
+          <div class="r0-block r0-end"><div class="r0-val">R₀ = 1</div><div class="r0-desc">Enfermedad endémica estable</div></div>
+          <div class="r0-block r0-ep"><div class="r0-val">R₀ &gt; 1</div><div class="r0-desc">Epidemia activa en crecimiento</div></div>
+        </div>
+        <p class="ref-note">Valores reales: COVID-19 ≈ 2–3 &nbsp;·&nbsp; Sarampión ≈ 12–18 &nbsp;·&nbsp; Influenza estacional ≈ 1.2–1.4</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-in">
+      <div class="footer-brand">
+        <span class="f-cross">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="9" y="2" width="6" height="20" rx="2"/>
+            <rect x="2" y="9" width="20" height="6" rx="2"/>
+          </svg>
+        </span>
+        Simulador SIR · Análisis Epidemiológico
+      </div>
+      <div class="footer-text">
+        Ecuaciones Diferenciales C-502105-4-1S-2026 &nbsp;·&nbsp; Docente: Nixon Andrés Meneses Marentes
+      </div>
+      <div class="footer-names">
+        Yeimar Joshep Bernal Zea &nbsp;·&nbsp; Sofía Velandia Rodríguez &nbsp;·&nbsp; Thomas Cruz Vanegas
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
